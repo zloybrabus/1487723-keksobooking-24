@@ -113,7 +113,6 @@ function getLng(min, max) {
 }
 getLng(139.70000, 139.80000);
 
-
 new Array(10).fill('').map((item, index) => ({
   author: getAvatar(), 
   offer: getTitle(), getAdress(), getPrice(), getType(), getRooms(), getGuest(), getCheckin(), getCheckout(), JSON.stringify(getArray()), getDescription(), JSON.stringify(getPhotos()),
