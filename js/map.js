@@ -1,0 +1,1 @@
+import {fillNoticeElement} from './popup.js';
