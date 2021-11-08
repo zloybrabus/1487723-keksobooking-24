@@ -9,7 +9,6 @@ const TYPE_NAME = {
   hotel: 'Отель',
 };
 
-
 export const fillNoticeElement = ({offer, author}) => {
   const noticeElement = cardTemplate.cloneNode(true);
 
