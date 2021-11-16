@@ -1,7 +1,6 @@
 import {closeMessage} from './message.js';
 import {createMessageError} from './message.js';
 
-
 export const getData = (onSuccess) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((responce) => {
