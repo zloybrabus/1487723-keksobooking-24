@@ -1,3 +1,4 @@
+import {sendData} from './api.js';
 import {returnMapPinStarting} from './map.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -24,12 +25,8 @@ const timeIn = formNotice.querySelector('#timein');
 const timeOut = formNotice.querySelector('#timeout');
 const resetButton = formNotice.querySelector('.ad-form__reset');
 
-//запрет на ручное редактирование поля адрес
 formNotice.querySelector('#address').setAttribute('readonly', 'readonly');
-// formNotice.querySelector('#address').readonly = true;  //не работает
 
-
-// Неактивное состояние форм
 const addBlockForm = () => {
   formNotice.classList.add('ad-form--disabled');
   formFilters.classList.add('map__filters--disabled');
@@ -39,7 +36,6 @@ const addBlockForm = () => {
 };
 addBlockForm();
 
-// Активация форм
 export const removeBlockForm = () => {
   formNotice.classList.remove('ad-form--disabled');
   formFilters.classList.remove('map__filters--disabled');
@@ -48,8 +44,6 @@ export const removeBlockForm = () => {
   });
 };
 
-
-// Валидация заголовка объявления
 noticeTitleInput.addEventListener('input', () => {
   const valueLength = noticeTitleInput.value.length;
 
@@ -64,8 +58,6 @@ noticeTitleInput.addEventListener('input', () => {
   noticeTitleInput.reportValidity();
 });
 
-
-// Валидация кол-ва комнат и кол-ва гостей
 quantityRoom.addEventListener('change', (evt) => {
   const choosenValue = (evt.target.value === '100') ? '0' : evt.target.value;
   for (let i = 0; i < quantityCapacity.length; i++) {
@@ -79,16 +71,12 @@ quantityRoom.addEventListener('change', (evt) => {
   }
 });
 
-
-// Валидация цены за ночь по типу жилья
 typeHabitation.addEventListener('change', (evt) => {
   const minPrice = MIN_PRICE[evt.target.value];
   priceInput.min = minPrice;
   priceInput.placeholder = minPrice.toString();
 });
 
-
-// Синхронизация времени заезда и выезда
 timeIn.addEventListener('change', (evt) => {
   timeOut.value = evt.target.value;
 });
@@ -104,11 +92,9 @@ export const setFormSubmit = (onSuccess, onError) => {
     const formData = new FormData(evt.target);
 
     sendData(
-      () => onSuccess(),
+      () => onSuccess(evt.target.reset(), returnMapPinStarting()),
       () => onError(),
       formData,
-      evt.target.reset(),
-      returnMapPinStarting(),
     );
   });
 };
