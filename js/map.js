@@ -1,7 +1,8 @@
 import {removeBlockForm} from './form.js';
 import {createCardNotice} from './popup.js';
+import {getData} from './api.js';
 
-const DEFAULT_LAT_LOCATION = 35.68770;
+const DEFAULT_LAT_LOCATION = 35.68772;
 const DEFAULT_LNG_LOCATION = 139.75433;
 const ZOOM_MAP = 12;
 
@@ -10,6 +11,7 @@ const address = document.querySelector('#address');
 const map = L.map('map-canvas')
   .on('load', () => {
     removeBlockForm();
+    getData();
     address.value = `${DEFAULT_LAT_LOCATION}, ${DEFAULT_LNG_LOCATION}`;
   })
   .setView({
@@ -47,21 +49,6 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = `${mainPinLocation.lat.toFixed(5)}, ${mainPinLocation.lng.toFixed(5)}`;
 });
 
-export const returnMapPinStarting = () => {
-  mainPinMarker.setLatLng({
-    lat: DEFAULT_LAT_LOCATION,
-    lng: DEFAULT_LNG_LOCATION,
-  });
-
-  map.setView({
-    lat: DEFAULT_LAT_LOCATION,
-    lng: DEFAULT_LNG_LOCATION,
-  }, ZOOM_MAP);
-
-  address.value = `${DEFAULT_LAT_LOCATION}, ${DEFAULT_LNG_LOCATION}`;
-
-};
-
 const markerGroup = L.layerGroup().addTo(map);
 
 export const renderMarkers = (data) => {
@@ -88,3 +75,21 @@ export const renderMarkers = (data) => {
   });
 };
 
+export const clearMarkers = () => markerGroup.clearLayers();
+
+export const returnMapPinStarting = () => {
+  mainPinMarker.setLatLng({
+    lat: DEFAULT_LAT_LOCATION,
+    lng: DEFAULT_LNG_LOCATION,
+  });
+
+  map.setView({
+    lat: DEFAULT_LAT_LOCATION,
+    lng: DEFAULT_LNG_LOCATION,
+  }, ZOOM_MAP);
+
+  map.closePopup();
+
+  address.value = `${DEFAULT_LAT_LOCATION}, ${DEFAULT_LNG_LOCATION}`;
+
+};

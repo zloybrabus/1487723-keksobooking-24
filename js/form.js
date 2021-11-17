@@ -1,10 +1,12 @@
 import {sendData} from './api.js';
-import {returnMapPinStarting} from './map.js';
+import {returnMapPinStarting, renderMarkers, clearMarkers} from './map.js';
+import {removeAvatarFoto} from './avatar.js';
+import {resetMapFilterForm, MAX_COUNT_MARKERS} from './filters.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
-const MIN_PRICE = {
+const MinPrice = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -12,9 +14,10 @@ const MIN_PRICE = {
   palace: 10000,
 };
 
+const MAX_NUMBER_ROOMS = 100;
+const MIN_NUMBER_CAPACITY = 0;
 
 const formNotice = document.querySelector('.ad-form');
-const formFilters = document.querySelector('.map__filters');
 const allFieldset = Array.from(formNotice.getElementsByTagName('fieldset'));
 const noticeTitleInput = formNotice.querySelector('#title');
 const quantityRoom = formNotice.querySelector('#room_number');
@@ -25,11 +28,8 @@ const timeIn = formNotice.querySelector('#timein');
 const timeOut = formNotice.querySelector('#timeout');
 const resetButton = formNotice.querySelector('.ad-form__reset');
 
-formNotice.querySelector('#address').setAttribute('readonly', 'readonly');
-
 const addBlockForm = () => {
   formNotice.classList.add('ad-form--disabled');
-  formFilters.classList.add('map__filters--disabled');
   allFieldset.forEach((element) => {
     element.disabled = true;
   });
@@ -38,7 +38,6 @@ addBlockForm();
 
 export const removeBlockForm = () => {
   formNotice.classList.remove('ad-form--disabled');
-  formFilters.classList.remove('map__filters--disabled');
   allFieldset.forEach((element) => {
     element.disabled = false;
   });
@@ -58,21 +57,42 @@ noticeTitleInput.addEventListener('input', () => {
   noticeTitleInput.reportValidity();
 });
 
-quantityRoom.addEventListener('change', (evt) => {
-  const choosenValue = (evt.target.value === '100') ? '0' : evt.target.value;
-  for (let i = 0; i < quantityCapacity.length; i++) {
-    quantityCapacity[i].disabled = true;
-    if (quantityCapacity[i].value === choosenValue) {
-      quantityCapacity[i].disabled = false;
-    }
-    if (quantityCapacity[i].value <= choosenValue && quantityCapacity[i].value > 0) {
-      quantityCapacity[i].disabled = false;
-    }
+const changeRoomCapacity = () => {
+  const numberRooms = +quantityRoom.value;
+  const numberCapacity = +quantityCapacity.value;
+  quantityCapacity.style.boxShadow = '0 2px 4px 4px #ff0303';
+  if (numberRooms < numberCapacity) {
+    quantityCapacity.setCustomValidity('Значение превышает кол-во комнат');
+  } else if (numberRooms === MAX_NUMBER_ROOMS && numberCapacity !== MIN_NUMBER_CAPACITY) {
+    quantityCapacity.setCustomValidity('100 комнат только "не для гостей"');
+  } else if (numberRooms !== MAX_NUMBER_ROOMS && numberCapacity === MIN_NUMBER_CAPACITY) {
+    quantityCapacity.setCustomValidity('"не для гостей" только для 100 комнат');
+  } else {
+    quantityCapacity.setCustomValidity('');
+    quantityCapacity.style.boxShadow = '';
   }
+  quantityCapacity.reportValidity();
+};
+
+quantityRoom.addEventListener('change', (evt) => {
+  changeRoomCapacity();
+  const choosenValue = (evt.target.value === '100') ? '0' : evt.target.value;
+  const valueCapacity = Array.from(quantityCapacity);
+  valueCapacity.forEach((element) => {
+    element.disabled = true;
+    if (element.value === choosenValue) {
+      element.disabled = false;
+    }
+    if (element.value <= choosenValue && element.value > 0) {
+      element.disabled = false;
+    }
+  });
 });
 
+quantityCapacity.addEventListener('change', changeRoomCapacity);
+
 typeHabitation.addEventListener('change', (evt) => {
-  const minPrice = MIN_PRICE[evt.target.value];
+  const minPrice = MinPrice[evt.target.value];
   priceInput.min = minPrice;
   priceInput.placeholder = minPrice.toString();
 });
@@ -85,21 +105,36 @@ timeOut.addEventListener('change', (evt) => {
   timeIn.value = evt.target.value;
 });
 
-
 export const setFormSubmit = (onSuccess, onError) => {
   formNotice.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const formData = new FormData(evt.target);
 
     sendData(
       () => onSuccess(evt.target.reset(), returnMapPinStarting()),
       () => onError(),
-      formData,
+      new FormData(evt.target),
+      resetMapFilterForm(),
+      priceInput.placeholder = MinPrice.flat,
     );
   });
 };
 
+const clearDefaultForms = (offers) => {
+  resetMapFilterForm();
+  clearMarkers();
+  renderMarkers(offers.slice(0, MAX_COUNT_MARKERS));
+};
+
+let defaultData;
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
+  formNotice.reset();
   returnMapPinStarting();
+  removeAvatarFoto();
+  priceInput.placeholder = MinPrice.flat;
+  clearDefaultForms(defaultData);
 });
+
+export const returnDefaultData = (data) => {
+  defaultData = data;
+};
