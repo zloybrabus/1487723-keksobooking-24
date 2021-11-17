@@ -1,4 +1,5 @@
-import {isEscapeKey} from './fncts.js';
+import {removeAvatarFoto} from './avatar.js';
+import {resetMapFilterForm} from './filters.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -6,6 +7,31 @@ const closeButton = errorTemplate.querySelector('.error__button');
 const errorLoadServerTemplate = document.querySelector('#error-load-server').content.querySelector('.error-load-server');
 
 const ALERT_SHOW_TIME = 5000;
+
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export const closeMessage = (modal) => {
+  const removeMessage = () => {
+    modal.remove();
+    document.removeEventListener('keydown', onEscKeydown);
+    window.removeEventListener('click', onModalClick);
+  };
+  function onEscKeydown (evt) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      removeMessage();
+      removeAvatarFoto();
+      resetMapFilterForm();
+    }
+  }
+  function onModalClick () {
+    removeMessage();
+    removeAvatarFoto();
+    resetMapFilterForm();
+  }
+  document.addEventListener('keydown', onEscKeydown);
+  window.addEventListener('click', onModalClick);
+};
 
 export const showMessageSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
@@ -17,28 +43,15 @@ export const showMessageError = () => {
   document.body.append(errorElement);
 };
 
-
-export const closeMessage = (modal) => {
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      modal.remove();
-    }
-  });
-
-  window.addEventListener('click', () => {
-    modal.remove();
-  });
-};
-
 closeButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   closeMessage();
 });
 
 export const createMessageError = () => {
+  const body = document.querySelector('body');
   const messageContainer = errorLoadServerTemplate.cloneNode(true);
-  document.body.append(messageContainer);
+  body.append(messageContainer);
 
   setTimeout(() => {
     messageContainer.remove();
