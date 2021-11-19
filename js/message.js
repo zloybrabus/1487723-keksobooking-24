@@ -10,6 +10,7 @@ const ALERT_SHOW_TIME = 5000;
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+
 export const closeMessage = (modal) => {
   const removeMessage = () => {
     modal.remove();
@@ -33,20 +34,24 @@ export const closeMessage = (modal) => {
   window.addEventListener('click', onModalClick);
 };
 
+
 export const showMessageSuccess = () => {
   const successElement = successTemplate.cloneNode(true);
   document.body.append(successElement);
 };
+
 
 export const showMessageError = () => {
   const errorElement = errorTemplate.cloneNode(true);
   document.body.append(errorElement);
 };
 
+
 closeButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   closeMessage();
 });
+
 
 export const createMessageError = () => {
   const body = document.querySelector('body');

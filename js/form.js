@@ -17,6 +17,7 @@ const MinPrice = {
 const MAX_NUMBER_ROOMS = 100;
 const MIN_NUMBER_CAPACITY = 0;
 
+
 const formNotice = document.querySelector('.ad-form');
 const allFieldset = Array.from(formNotice.getElementsByTagName('fieldset'));
 const noticeTitleInput = formNotice.querySelector('#title');
@@ -28,6 +29,7 @@ const timeIn = formNotice.querySelector('#timein');
 const timeOut = formNotice.querySelector('#timeout');
 const resetButton = formNotice.querySelector('.ad-form__reset');
 
+
 const addBlockForm = () => {
   formNotice.classList.add('ad-form--disabled');
   allFieldset.forEach((element) => {
@@ -36,12 +38,14 @@ const addBlockForm = () => {
 };
 addBlockForm();
 
+
 export const removeBlockForm = () => {
   formNotice.classList.remove('ad-form--disabled');
   allFieldset.forEach((element) => {
     element.disabled = false;
   });
 };
+
 
 noticeTitleInput.addEventListener('input', () => {
   const valueLength = noticeTitleInput.value.length;
@@ -56,6 +60,7 @@ noticeTitleInput.addEventListener('input', () => {
 
   noticeTitleInput.reportValidity();
 });
+
 
 const changeRoomCapacity = () => {
   const numberRooms = +quantityRoom.value;
@@ -91,11 +96,13 @@ quantityRoom.addEventListener('change', (evt) => {
 
 quantityCapacity.addEventListener('change', changeRoomCapacity);
 
+
 typeHabitation.addEventListener('change', (evt) => {
   const minPrice = MinPrice[evt.target.value];
   priceInput.min = minPrice;
   priceInput.placeholder = minPrice.toString();
 });
+
 
 timeIn.addEventListener('change', (evt) => {
   timeOut.value = evt.target.value;
@@ -104,6 +111,7 @@ timeIn.addEventListener('change', (evt) => {
 timeOut.addEventListener('change', (evt) => {
   timeIn.value = evt.target.value;
 });
+
 
 export const clearDefaultForms = (offers) => {
   resetMapFilterForm();
@@ -124,6 +132,7 @@ resetButton.addEventListener('click', (evt) => {
 export const returnDefaultData = (data) => {
   defaultData = data;
 };
+
 
 export const setFormSubmit = (onSuccess, onError) => {
   formNotice.addEventListener('submit', (evt) => {

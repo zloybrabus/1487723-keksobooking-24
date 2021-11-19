@@ -1,3 +1,4 @@
+
 import {removeBlockForm} from './form.js';
 import {createCardNotice} from './popup.js';
 import {getData} from './api.js';
@@ -7,6 +8,7 @@ const DEFAULT_LNG_LOCATION = 139.75433;
 const ZOOM_MAP = 12;
 
 const address = document.querySelector('#address');
+
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -19,6 +21,7 @@ const map = L.map('map-canvas')
     lng: DEFAULT_LNG_LOCATION,
   }, ZOOM_MAP);
 
+
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -26,11 +29,13 @@ L.tileLayer(
   },
 ).addTo(map);
 
+
 const mainPinIcon = L.icon ({
   iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
+
 
 const mainPinMarker = L.marker(
   {
@@ -44,12 +49,15 @@ const mainPinMarker = L.marker(
 );
 mainPinMarker.addTo(map);
 
+
 mainPinMarker.on('moveend', (evt) => {
   const mainPinLocation = evt.target.getLatLng();
   address.value = `${mainPinLocation.lat.toFixed(5)}, ${mainPinLocation.lng.toFixed(5)}`;
 });
 
+
 const markerGroup = L.layerGroup().addTo(map);
+
 
 export const renderMarkers = (data) => {
   data.forEach((offer) => {
@@ -76,6 +84,7 @@ export const renderMarkers = (data) => {
 };
 
 export const clearMarkers = () => markerGroup.clearLayers();
+
 
 export const returnMapPinStarting = () => {
   mainPinMarker.setLatLng({

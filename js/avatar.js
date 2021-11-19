@@ -19,6 +19,7 @@ export const loadAvatar = () => {
   });
 };
 
+
 export const loadFotoLodging = () => {
   fileFotoChooser.addEventListener('change', () => {
     const file = fileFotoChooser.files[0];
