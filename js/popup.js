@@ -1,4 +1,6 @@
+
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
+
 
 const TypeName = {
   flat: 'Квартира',
@@ -7,6 +9,7 @@ const TypeName = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
+
 
 export const createCardNotice = ({offer, author}) => {
   const noticeElement = cardTemplate.cloneNode(true);

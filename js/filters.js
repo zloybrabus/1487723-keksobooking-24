@@ -36,6 +36,7 @@ export const removeBlockFiltersForm = () => {
   });
 };
 
+
 const selectHousingType = (item) => item.offer.type === housingType.value || housingType.value === 'any';
 
 const selectHousingPrice = (item) => housingPrice.value === 'any'
@@ -43,9 +44,12 @@ const selectHousingPrice = (item) => housingPrice.value === 'any'
   || item.offer.price >= HousingPrice.low && item.offer.price < HousingPriceName.high && housingPrice.value === HousingPriceName.middle
   || item.offer.price >=  HousingPrice.high && housingPrice.value === HousingPriceName.high;
 
+
 const selectHousingRooms = (item) => item.offer.rooms === +housingRooms.value || housingRooms.value === 'any';
 
+
 const selectHousingGuests = (item) => item.offer.guests === +housingGuests.value || housingGuests.value === 'any';
+
 
 const selectHousingFeatures = (item) => {
   const housingFeatures = Array.from(mapFiltersForm.querySelectorAll('.map__checkbox:checked'));
@@ -55,6 +59,7 @@ const selectHousingFeatures = (item) => {
   }
   return housingFeaturesValue.every((value) => item.offer.features.includes(value));
 };
+
 
 export const setMapFilters = (offer) => {
   mapFiltersForm.addEventListener('change', debounce(() => {
