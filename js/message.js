@@ -1,4 +1,4 @@
-import {removeAvatarFoto} from './avatar.js';
+import {resetImages} from './avatar.js';
 import {resetMapFilterForm} from './filters.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -21,13 +21,13 @@ export const closeMessage = (modal) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       removeMessage();
-      removeAvatarFoto();
+      resetImages();
       resetMapFilterForm();
     }
   }
   function onModalClick () {
     removeMessage();
-    removeAvatarFoto();
+    resetImages();
     resetMapFilterForm();
   }
   document.addEventListener('keydown', onEscKeydown);

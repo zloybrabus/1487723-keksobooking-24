@@ -1,6 +1,6 @@
 import {sendData} from './api.js';
 import {returnMapPinStarting, renderMarkers, clearMarkers} from './map.js';
-import {removeAvatarFoto} from './avatar.js';
+import {resetImages} from './avatar.js';
 import {resetMapFilterForm, MAX_COUNT_MARKERS} from './filters.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -124,7 +124,7 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   formNotice.reset();
   returnMapPinStarting();
-  removeAvatarFoto();
+  resetImages();
   priceInput.placeholder = MinPrice.flat;
   clearDefaultForms(defaultData);
 });
